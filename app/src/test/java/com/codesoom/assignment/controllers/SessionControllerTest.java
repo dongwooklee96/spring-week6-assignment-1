@@ -29,14 +29,16 @@ class SessionControllerTest {
 
     @BeforeEach
     void setUp() {
-        given(authenticationService.login("tester@example.com","test"))
+        String validEmail = "tester@example.com";
+        String invalidEmail = "badguy@example.com";
+        given(authenticationService.login(validEmail,"test"))
             .willReturn("a.b.c");
 
-        given(authenticationService.login("badguy@example.com","test"))
-            .willThrow(new LoginFailException("badguy@example.com"));
+        given(authenticationService.login(invalidEmail,"test"))
+            .willThrow(new LoginFailException(invalidEmail));
 
-        given(authenticationService.login("tester@example.com","xxx"))
-            .willThrow(new LoginFailException("badguy@example.com"));
+        given(authenticationService.login(validEmail,"xxx"))
+            .willThrow(new LoginFailException(invalidEmail));
     }
 
     @DisplayName("올바른 정보로 로그인을 요청하면, 상태코드 201을 반환한다.")
